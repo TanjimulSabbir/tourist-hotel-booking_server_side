@@ -31,9 +31,13 @@ async function run() {
         const OutDoorActivityCollections = client.db("Tourist-Hotel").collection("OutDoorActivity");
         const SpaWellnessCollections = client.db("Tourist-Hotel").collection("SpaWellness");
         const TransportationCollections = client.db("Tourist-Hotel").collection("Transportation");
+        const ShopCollections = client.db("Tourist-Hotel").collection("Shop");
+        const BusinessCollections = client.db("Tourist-Hotel").collection("Business");
+        const WeddingCollections = client.db("Tourist-Hotel").collection("Wedding");
         const LoginUsersCollections = client.db("Tourist-Hotel").collection("LoginUsers");
         const AdminUsersCollections = client.db("Tourist-Hotel").collection("AdminUsers");
         const BookingCollections = client.db("Tourist-Hotel").collection("Booking");
+        const GalleryCollections = client.db("Tourist-Hotel").collection("Gallery");
 
         // Create JSON WEB TOKEN for Login and SignUp
         app.post('/jwt', async (req, res) => {
@@ -104,6 +108,51 @@ async function run() {
         app.get('/offers', async (req, res) => {
             const query = {};
             const result = await OffersCollections.find(query).toArray();
+            res.status(201).send(result);
+        })
+        app.get('/spa', async (req, res) => {
+            const query = {};
+            const result = await SpaWellnessCollections.find(query).toArray();
+            res.status(201).send(result);
+        })
+        app.get('/transportation', async (req, res) => {
+            const query = {};
+            const result = await TransportationCollections.find(query).toArray();
+            res.status(201).send(result);
+        })
+        app.get('/fitness', async (req, res) => {
+            const query = {};
+            const result = await FitnessCollections.find(query).toArray();
+            res.status(201).send(result);
+        })
+        app.get('/outdoor', async (req, res) => {
+            const query = {};
+            const result = await OutDoorActivityCollections.find(query).toArray();
+            res.status(201).send(result);
+        })
+        app.get('/business', async (req, res) => {
+            const query = {};
+            const result = await BusinessCollections.find(query).toArray();
+            res.status(201).send(result);
+        })
+        app.get('/shop', async (req, res) => {
+            const query = {};
+            const result = await ShopCollections.find(query).toArray();
+            res.status(201).send(result);
+        })
+        app.get('/restaurant', async (req, res) => {
+            const query = {};
+            const result = await DiningRestaurantCollections.find(query).toArray();
+            res.status(201).send(result);
+        })
+        app.get('/wedding', async (req, res) => {
+            const query = {};
+            const result = await WeddingCollections.find(query).toArray();
+            res.status(201).send(result);
+        })
+        app.get('/gallery', async (req, res) => {
+            const query = {};
+            const result = await GalleryCollections.find(query).toArray();
             res.status(201).send(result);
         })
         // Add Login Users in Database from Login/ AuthProvider

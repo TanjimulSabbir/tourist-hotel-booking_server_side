@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "assignmentandprojects-fb0df"
-  }
+  },
+  "targets": {
+    "assignmentandprojects-fb0df": {
+      "hosting": {
+        "first": [
+          "paradise-palms-tourist-hotel"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

@@ -307,10 +307,12 @@ async function run() {
         // Delete Login User from Dashboard AllUser (Admin)
         app.delete('/alluser/:id', VerifyJWT, CheckLoginAndJWTEmail, AdminCheck, async (req, res) => {
             const data = req.body;
+            console.log(data)
             try {
-                const result = await LoginUsersCollections.deleteOne({ _id: new ObjectId(data.id) });
+                const result = await LoginUsersCollections.deleteOne({ email: data.email });
+                console.log(result)
                 if (result.deletedCount) {
-                    return res.status(204).send({ success: true, message: `${data.email} deleted Successfully`, data: result });
+                    return res.status(204).send({ success: true, message: 'User Deleted Successfully', data: result });
                 }
 
             } catch (error) {

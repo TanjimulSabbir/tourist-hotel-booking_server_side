@@ -19,7 +19,6 @@ app.listen(port, () => {
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.mpmd8xf.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-
 async function run() {
     try {
         const ResortServicesCollections = client.db("Tourist-Hotel").collection("ResortServices");
@@ -79,7 +78,6 @@ async function run() {
         const CheckLoginAndJWTEmail = async (req, res, next) => {
             const decoded = req.decoded;
             const UserEmail = req.params.id;
-            console.log((UserEmail !== decoded.email), 'CheckLogin');
             if (!UserEmail) {
                 return res.status(403).send({ message: 'Forbidden Access', status: 403 });
             }
@@ -191,7 +189,6 @@ async function run() {
         async function AdminModeratorCheck(req, res, next) {
             const UserEmail = req.params.id;
             const MatchedUser = await AdminUsersCollections.findOne({ email: UserEmail });
-            console.log(MatchedUser, 'admin/moderator checking')
             if (!MatchedUser) {
                 return res.status(400).send({ message: 'You are not in Admin/Moderator list', status: 400 });
             }
@@ -205,7 +202,6 @@ async function run() {
         app.post('/admin/:id', VerifyJWT, CheckLoginAndJWTEmail, AdminCheck, async (req, res) => {
             try {
                 const UserData = req.body.UserData;
-                console.log(UserData.email, 'admin body')
                 const UserDataEmail = UserData.email;
                 const AlreadyAdded = await AdminUsersCollections.findOne({ email: UserDataEmail })
                 if (AlreadyAdded) {
@@ -251,14 +247,12 @@ async function run() {
         // Admin User Delete
         app.delete('/admin/:id', VerifyJWT, CheckLoginAndJWTEmail, AdminCheck, async (req, res) => {
             const DeleteEmail = req.body;
-            console.log(DeleteEmail.email, 'DeletedEmail');
             try {
                 const ReservedUser = ["tanzimulislamsabbir@gmail.com", "tanjimulislamsabbir02@gmail.com"]
                 if (ReservedUser.includes(DeleteEmail.email)) {
                     return res.status(409).send({ message: `${DeleteEmail.email} is a reserved user. You can not delete this user.`, status: 409 })
                 }
                 const result = await AdminUsersCollections.deleteOne({ email: DeleteEmail.email });
-                console.log(result, 'from admin delete')
                 if (result) {
                     return res.status(204).send({ success: true, message: `${DeleteEmail.email} deleted Successfully`, data: result });
                 }
@@ -307,10 +301,8 @@ async function run() {
         // Delete Login User from Dashboard AllUser (Admin)
         app.delete('/alluser/:id', VerifyJWT, CheckLoginAndJWTEmail, AdminCheck, async (req, res) => {
             const data = req.body;
-            console.log(data)
             try {
                 const result = await LoginUsersCollections.deleteOne({ email: data.email });
-                console.log(result)
                 if (result.deletedCount) {
                     return res.status(204).send({ success: true, message: 'User Deleted Successfully', data: result });
                 }
@@ -323,7 +315,6 @@ async function run() {
         app.delete('/booking/:id', VerifyJWT, CheckLoginAndJWTEmail, async (req, res) => {
             const data = req.body;
             const UserEmail = req.params.id;
-            console.log(data, UserEmail)
             if (UserEmail !== data.email) {
                 return res.status(409).send({ message: "Only user can delete", status: 409 })
             }
@@ -353,7 +344,6 @@ async function run() {
                     return res.status(409).send({ message: `${BookingData.bookingName} Already Booked on ${alreadyAdded.date}`, status: 409 })
                 }
                 const result = await BookingCollections.insertOne({ ...BookingData });
-                console.log(result)
                 if (result.acknowledged) {
                     return res.status(201).send({ success: true, message: `${BookingData.bookingName} Booking Successful on ${BookingData.date}`, data: result.ops });
                 } else {
@@ -386,7 +376,6 @@ async function run() {
                     data: result
                 })
             } catch (error) {
-                console.log(error)
                 return res.status(500).send({ error });
             }
         })

@@ -252,8 +252,9 @@ async function run() {
                     return res.status(409).send({ message: `${DeleteEmail.email} is a reserved user. You can not delete this user.`, status: 409 })
                 }
                 const result = await AdminUsersCollections.deleteOne({ email: DeleteEmail.email });
-                if (result) {
-                    return res.status(204).send({ success: true, message: `${DeleteEmail.email} deleted Successfully`, data: result });
+                if (result.deletedCount) {
+                    // 204 status code didn't response client side any data so I use 200.
+                    return res.status(200).send({ success: true, message: `${DeleteEmail.email} deleted Successfully`, data: result });
                 }
             } catch (error) {
                 return res.status(500).send({ error });
@@ -302,8 +303,8 @@ async function run() {
             const data = req.body;
             try {
                 const result = await LoginUsersCollections.deleteOne({ email: data.email });
-                if (result) {
-                    return res.status(204).send({ success: true, message: 'User Deleted Successfully', data: result });
+                if (result.deletedCount) {
+                    return res.status(200).send({ success: true, message: 'User Deleted Successfully', data: result });
                 }
 
             } catch (error) {
@@ -315,12 +316,12 @@ async function run() {
             const data = req.body;
             const UserEmail = req.params.id;
             if (UserEmail !== data.email) {
-                return res.status(409).send({ message: "Only user can delete", status: 409 })
+                return res.status(409).send({ message: "Only user can be deleted", status: 409 })
             }
             try {
                 const result = await BookingCollections.deleteOne({ ...data });
                 if (result) {
-                    return res.status(204).send({ success: true, message: `${data.bookingName} deleted Successfully`, data: result });
+                    return res.status(200).send({ success: true, message: `${data.bookingName} deleted Successfully`, data: result });
                 }
 
             } catch (error) {
@@ -378,8 +379,6 @@ async function run() {
                 return res.status(500).send({ error });
             }
         })
-
-
     }
     finally {
     }

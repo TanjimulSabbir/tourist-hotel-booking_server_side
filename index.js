@@ -55,7 +55,6 @@ async function run() {
                 return res.status(500).send({ error })
             }
         })
-
         // JWT Verify MiddleWare/Function
         function VerifyJWT(req, res, next) {
             const AuthHeader = req.headers.authorization;
@@ -303,7 +302,7 @@ async function run() {
             const data = req.body;
             try {
                 const result = await LoginUsersCollections.deleteOne({ email: data.email });
-                if (result.deletedCount) {
+                if (result) {
                     return res.status(204).send({ success: true, message: 'User Deleted Successfully', data: result });
                 }
 
@@ -320,7 +319,7 @@ async function run() {
             }
             try {
                 const result = await BookingCollections.deleteOne({ ...data });
-                if (result.deletedCount) {
+                if (result) {
                     return res.status(204).send({ success: true, message: `${data.bookingName} deleted Successfully`, data: result });
                 }
 
